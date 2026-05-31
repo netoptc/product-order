@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -32,6 +33,7 @@ public class ProductController {
         return ResponseEntity.ok(result);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/")
     public ResponseEntity<ProductDto>  insert(@Valid @RequestBody ProductDto dto
     ) {
@@ -49,6 +51,7 @@ public class ProductController {
         return ResponseEntity.ok(result);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<ProductDto> update(
             @PathVariable Long id,
@@ -58,6 +61,7 @@ public class ProductController {
         return ResponseEntity.ok(result);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
             @PathVariable Long id

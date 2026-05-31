@@ -4,6 +4,7 @@ package com.netoptc.DsCommerce.handlers;
 import com.netoptc.DsCommerce.dtos.FieldErrorDto;
 import com.netoptc.DsCommerce.dtos.ResponseErrorDto;
 import com.netoptc.DsCommerce.exceptions.BadRequestException;
+import com.netoptc.DsCommerce.exceptions.ForbiddenException;
 import com.netoptc.DsCommerce.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.ILoggerFactory;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -47,6 +49,20 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(status).body(err);
     }
 
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ResponseErrorDto> forbidden(ForbiddenException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        ResponseErrorDto err = new ResponseErrorDto(Instant.now(), request.getRequestURI(), status.value(), e.getMessage());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ResponseErrorDto> forbidden(AccessDeniedException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+        ResponseErrorDto err = new ResponseErrorDto(Instant.now(), request.getRequestURI(), status.value(), "Acesso negado");
+        return ResponseEntity.status(status).body(err);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseErrorDto> handleGenericException(Exception e, HttpServletRequest request) {
         logger.error("An error occurred", e);
@@ -54,4 +70,6 @@ public class ControllerExceptionHandler {
         ResponseErrorDto err = new ResponseErrorDto(Instant.now(), request.getRequestURI(), status.value(), "Ocorreu um erro interno");
         return ResponseEntity.status(status).body(err);
     }
+
+
 }
