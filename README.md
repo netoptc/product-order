@@ -9,7 +9,7 @@ Este é um projeto de estudo que implementa uma api rest de gestão de pedidos
 - H2 Database
 - Maven
 
-## Digrama de classes
+## Diagrama de classes
 
 ![Diagrama de classes](/assets/product_order_ERD.png "Diagrama de classes")
 
