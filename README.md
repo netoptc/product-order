@@ -2,12 +2,17 @@
 
 Este é um projeto de estudo que implementa uma api rest de gestão de pedidos
 
-## Stack usada:
+## Stack:
 
 - Java 17
 - Spring Boot 3.1
 - H2 Database
 - Maven
+
+## Escopo:
+- Gestão do catalogo de produtos
+- Criação de peditos
+   
 
 ## Diagrama de classes
 
