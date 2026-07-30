@@ -19,6 +19,9 @@ Este é um projeto de estudo que implementa uma api rest de gestão de pedidos
 mvn spring-boot:run
 ```
 
+## Licença
+MIT — veja [LICENSE](LICENSE).
+
 
 
 
