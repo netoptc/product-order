@@ -2,6 +2,7 @@ package com.netoptc.productorder.entities;
 
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +23,7 @@ public class Product {
 
     private String imgUrl;
 
-    @ManyToMany
+    @ManyToMany()
     @JoinTable(
             name = "tb_product_category",
             joinColumns = @JoinColumn(name = "product_id"),

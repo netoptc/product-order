@@ -2,7 +2,6 @@ package com.netoptc.productorder.services;
 
 
 import com.netoptc.productorder.dtos.ProductDto;
-import com.netoptc.productorder.dtos.ProductMinDto;
 import com.netoptc.productorder.entities.Category;
 import com.netoptc.productorder.entities.Product;
 import com.netoptc.productorder.exceptions.BadRequestException;
@@ -16,7 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -27,13 +30,22 @@ public class ProductService {
     @Autowired
     private CategoryService categoryService;
 
-    public Page<ProductMinDto> findAll(Pageable pageable, String name) {
-        Page<Product> result = productRepository.findAllByName(pageable, name);
-        return  result.map(ProductMinDto::new);
+    public Page<ProductDto> findAllPaginated(Pageable pageable, String name) {
+        Page<Product> result = productRepository.findAllPaginated(pageable, name);
+        List<Long> ids = result.getContent().stream().map(p -> p.getId()).toList();
+        List<Product> products = productRepository.findAllWithCategoriesByIds(ids);
+
+        Map<Long, Product> productsMap = products.stream()
+                .collect(Collectors.toMap(Product::getId, Function.identity()));
+
+        return  result.map(p -> new ProductDto(productsMap.get(p.getId())));
     }
 
-
-
+    public List<ProductDto> findAll() {
+        List<Product> result = productRepository.findAllWithCategories();
+        return  result.stream().map(p -> new ProductDto(p)).collect(Collectors.toList());
+    }
+    
     @Transactional(readOnly = true)
     public ProductDto findById(Long id) {
         Product result = productRepository.findById(id).orElseThrow(ResourceNotFoundException::new);

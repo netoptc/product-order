@@ -16,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import jakarta.validation.Valid;
 
 import java.net.URI;
+import java.util.List;
 
 @Controller
 @RequestMapping("products")
@@ -25,11 +26,18 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/")
-    public ResponseEntity<Page<ProductMinDto>> findAll(
-            @PageableDefault(sort = "name", direction = Sort.Direction.ASC, size = 12) Pageable pageable,
+    public ResponseEntity<Page<ProductDto>> findAllPaginated(
+            @PageableDefault(sort = "id", direction = Sort.Direction.ASC, size = 12) Pageable pageable,
             @RequestParam(defaultValue = "") String name
     ) {
-        Page<ProductMinDto> result =  productService.findAll(pageable, name);
+        Page<ProductDto> result =  productService.findAllPaginated(pageable, name);
+        return ResponseEntity.ok(result);
+    }
+
+
+    @GetMapping("/all")
+    public ResponseEntity<List<ProductDto>> findAll() {
+        List<ProductDto> result =  productService.findAll();
         return ResponseEntity.ok(result);
     }
 
