@@ -58,7 +58,7 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ResponseErrorDto> forbidden(AccessDeniedException e, HttpServletRequest request) {
-        HttpStatus status = HttpStatus.UNAUTHORIZED;
+        HttpStatus status = HttpStatus.FORBIDDEN;
         ResponseErrorDto err = new ResponseErrorDto(Instant.now(), request.getRequestURI(), status.value(), "Acesso negado");
         return ResponseEntity.status(status).body(err);
     }
